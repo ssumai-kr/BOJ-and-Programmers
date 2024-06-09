@@ -6,10 +6,9 @@ using namespace std;
 
 int n, m;
 int arr[MAX] = { 0, };
-bool visited[MAX] = { 0, };
 
-void dfs(int num, int cnt) {
-	if (cnt == m) {
+void dfs(int start, int depth) {
+	if (depth == m) {
 		for (int i = 0; i < m; i++) {
 			cout << arr[i] << ' ';
 		}
@@ -17,13 +16,9 @@ void dfs(int num, int cnt) {
 		return;
 	}
 
-	for (int i = num; i <= n; i++) {
-		if (!visited[i]) {
-			visited[i] = true;
-			arr[cnt] = i;
-			dfs(i + 1, cnt + 1);
-			visited[i] = false;
-		}
+	for (int i = start; i <= n; i++) {
+		arr[depth] = i;
+		dfs(i + 1, depth + 1);
 	}
 }
 
