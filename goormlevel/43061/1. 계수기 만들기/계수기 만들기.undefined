@@ -1,0 +1,37 @@
+//각 자리마다 최댓값이 다른 숫자판을 가진 계수기
+//만족 요건
+//1. 계수기는 N개의 자릿수를 표시할 수 있다.
+//2. i자리에는 0부터 Ai 까지 숫자 표시 가능 
+//3. 버튼을 한번 누르면 가장 오른쪽 자리의 숫자기 + 1
+//4. 최댓값보다 커지면, 0으로 초기화, 바로 왼쪽의 숫자를 1 증가.
+//5. 가장 왼쪽 자리의 숫자가 최댓값을 넘어갈 때는 올림을 전파하지 않는다.
+
+const fs = require('fs');
+const input = fs.readFileSync(0).toString().trim().split('\n');
+
+const N = parseInt(input[0]);
+const A = input[1].trim().split(' ').map(Number); // 각 자리의 최댓값
+const B = input[2].trim().split(' ').map(Number); // 현재 상태
+const K = parseInt(input[3]); // 버튼 누르는 횟수
+
+for (let k = 0; k < K; k++) {
+    // 1. 가장 오른쪽 자릿수 증가
+    B[N - 1]++;
+    
+    // 2. 오른쪽에서 왼쪽으로 올림 전파
+    for (let i = N - 1; i >= 0; i--) {
+        if (B[i] > A[i]) {
+            B[i] = 0; // 현재 자리 0으로 초기화
+            if (i > 0) {
+                B[i - 1]++; // 왼쪽 자리 증가
+            }
+            // 가장 왼쪽(i=0)인 경우 올림을 전파하지 않고 종료
+        } else {
+            // 올림이 발생하지 않으면 이번 클릭에 대한 처리는 끝
+            break;
+        }
+    }
+}
+
+// 결과 출력 (공백 없이 숫자판 나열)
+console.log(B.join(''));
