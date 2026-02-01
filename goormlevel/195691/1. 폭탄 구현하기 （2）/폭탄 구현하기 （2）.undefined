@@ -1,0 +1,64 @@
+//N X N 크기의 정사각형
+// 	let by = boom[b][1];
+// 	if(space[bx][by] !== '@' && space[bx][by] !== '#') {
+// 		space[bx][by]++;
+// 		for(let i = 0; i < 4; i++) {
+// 			let nbx = nbx + dx[i];
+// 			let nby = nby + dy[i];
+
+// 			if(nbx >= 0 && nbx < N && nby >= 0 && nby < N) {
+// 				if(space[nbx][nby] !== '@' && space[nbx][nby] !== '#') {
+// 					space[nbx][nby]++;
+// 				} else if(space[nbx][nby] === '@') {
+// 					space[nbx][nby] += 2;
+// 				} else {}
+// 			}
+// 		}
+// 	}
+// }
+
+const fs = require('fs');
+const input = fs.readFileSync(0).toString().trim().split('\n');
+
+const [N, K] = input[0].trim().split(/\s+/).map(Number);
+
+// 1. 지형 정보를 담을 map (문자열 그대로 보존)
+const map = [];
+for (let i = 1; i <= N; i++) {
+    map.push(input[i].trim().split(/\s+/));
+}
+
+// 2. 폭탄 점수를 기록할 score 보드 (모두 0으로 초기화)
+let score = Array.from({ length: N }, () => Array(N).fill(0));
+
+// 3. 상하좌우 + 자기 자신(중앙)을 포함한 5방향 벡터
+const dy = [0, -1, 1, 0, 0];
+const dx = [0, 0, 0, -1, 1];
+
+for (let i = N + 1; i < N + 1 + K; i++) {
+    const [r, c] = input[i].trim().split(/\s+/).map(v => parseInt(v) - 1);
+
+    for (let d = 0; d < 5; d++) {
+        const ny = r + dy[d];
+        const nx = c + dx[d];
+
+        // 격자 내부에 있고 벽(#)이 아닌 경우에만 진행
+        if (ny >= 0 && ny < N && nx >= 0 && nx < N && map[ny][nx] !== '#') {
+            if (map[ny][nx] === '@') {
+                score[ny][nx] += 2; // @라면 2 증가
+            } else {
+                score[ny][nx] += 1; // 0(평지)라면 1 증가
+            }
+        }
+    }
+}
+
+// 4. 모든 칸 중 최대 폭탄 값 찾기
+let maxBomb = 0;
+for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+        if (score[i][j] > maxBomb) maxBomb = score[i][j];
+    }
+}
+
+console.log(maxBomb);
