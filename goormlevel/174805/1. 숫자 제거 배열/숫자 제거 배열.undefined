@@ -1,0 +1,48 @@
+// // Run by Node.js
+// const readline = require('readline');
+
+// (async () => {
+//     let rl = readline.createInterface({ input: process.stdin });
+//     let input = [];
+    
+//     for await (const line of rl) {
+//         input.push(line);
+        
+//         if (input.length === 2) {
+//             // input[0]에서 N과 K를 분리 (K는 찾고자 하는 문자열)
+//             const [N, K] = input[0].trim().split(' ');
+//             // input[1]에서 배열 요소들을 분리
+//             const arr = input[1].trim().split(' ');
+            
+//             let cnt = arr.length; // 전체 개수에서 시작
+            
+//             for (let c of arr) {
+//                 // c(요소) 안에 K(찾는 문자)가 포함되어 있는지 확인
+//                 if (c.includes(K)) {
+//                     cnt--; // 포함되어 있다면 카운트 감소
+//                 }
+//             }
+            
+//             console.log(cnt);
+//             rl.close();
+//         }
+//     }
+    
+//     process.exit();
+// })();
+//N개의 정수를 순서대로 넣는다. 정수 중에서 숫자 문자열 K가 포함되어있으면 배열에 넣지 않음.
+
+const fs = require('fs');
+const input = fs.readFileSync(0).toString().trim().split('\n');
+
+const [N, K] = input[0].trim().split(' ');
+const arr = input[1].trim().split(' ');
+let cnt = 0;
+for(let i = 0; i < N; i++) {
+	if(arr[i].includes(K)) {
+		cnt++;
+	}
+}
+let result = N - cnt;
+console.log(result);
+
